@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/product.dart';
+import '../widgets/product_image.dart';
 
 class ProductDetailScreen extends StatelessWidget {
   final Product product;
@@ -29,12 +30,10 @@ class ProductDetailScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
                 color: Colors.grey[200],
               ),
-              child: Image.network(
+              child: buildProductImage(
                 product.imageUrl,
                 fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return const Icon(Icons.clean_hands, size: 60, color: Colors.grey);
-                },
+                placeholder: const Icon(Icons.clean_hands, size: 60, color: Colors.grey),
               ),
             ),
             const SizedBox(height: 20),
