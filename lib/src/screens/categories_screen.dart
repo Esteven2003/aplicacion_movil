@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/product.dart';
+import '../widgets/product_image.dart';
 
 class CategoriesScreen extends StatelessWidget {
   final List<Product> products;
@@ -110,20 +111,18 @@ class CategoriesScreen extends StatelessWidget {
                         child: ListTile(
                           leading: ClipRRect(
                             borderRadius: BorderRadius.circular(8),
-                            child: Image.network(
+                            child: buildProductImage(
                               product.imageUrl,
                               width: 48,
                               height: 48,
                               fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
-                                return Container(
-                                  width: 48,
-                                  height: 48,
-                                  color: theme.colorScheme.surfaceVariant,
-                                  alignment: Alignment.center,
-                                  child: const Icon(Icons.clean_hands, size: 24),
-                                );
-                              },
+                              placeholder: Container(
+                                width: 48,
+                                height: 48,
+                                color: theme.colorScheme.surfaceVariant,
+                                alignment: Alignment.center,
+                                child: const Icon(Icons.clean_hands, size: 24),
+                              ),
                             ),
                           ),
                           title: Text(

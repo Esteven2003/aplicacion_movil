@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/product.dart';
+import '../widgets/product_image.dart';
 
 class SearchScreen extends StatefulWidget {
   final List<Product> products;
@@ -101,19 +102,17 @@ class _SearchScreenState extends State<SearchScreen> {
                         child: ListTile(
                           leading: ClipRRect(
                             borderRadius: BorderRadius.circular(8),
-                            child: Image.network(
+                            child: buildProductImage(
                               product.imageUrl,
                               width: 50,
                               height: 50,
                               fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
-                                return Container(
-                                  width: 50,
-                                  height: 50,
-                                  color: Colors.grey[300],
-                                  child: const Icon(Icons.clean_hands),
-                                );
-                              },
+                              placeholder: Container(
+                                width: 50,
+                                height: 50,
+                                color: Colors.grey[300],
+                                child: const Icon(Icons.clean_hands),
+                              ),
                             ),
                           ),
                           title: Text(

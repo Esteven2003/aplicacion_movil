@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 import '../models/product.dart';
 import '../models/cart_item.dart';
+import '../widgets/product_image.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -12,6 +14,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _searchController = TextEditingController();
+  bool _hasShownImageWarning = false;
 
   final List<Product> products = [
     Product(
@@ -19,7 +22,8 @@ class _HomeScreenState extends State<HomeScreen> {
       name: 'Escoba de Coco normal',
       description: 'Escoba con base de madera y fibra natural profesional para interior y exterior',
       price: 3.25,
-      imageUrl: 'https://quimiclean-ec.com/wp-content/uploads/2022/05/escoba-de-coco-40cm.jpg',
+      imageUrl:
+          'https://quimiclean-ec.com/wp-content/uploads/2022/05/escoba-de-coco-40cm.jpg',
       category: 'Escobas',
       stock: 15,
       rating: 4.5,
@@ -100,9 +104,66 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedDestination = 0;
 
   @override
+  void initState() {
+    super.initState();
+    _checkCoconutBroomImage();
+  }
+
+  @override
   void dispose() {
     _searchController.dispose();
     super.dispose();
+  }
+
+  Future<void> _checkCoconutBroomImage() async {
+    Product? coconutBroom;
+    try {
+      coconutBroom = products.firstWhere((product) => product.id == '1');
+    } catch (_) {
+      coconutBroom = null;
+    }
+
+    if (coconutBroom == null) {
+      return;
+    }
+
+    final Uri? uri = Uri.tryParse(coconutBroom.imageUrl);
+    if (uri == null || !uri.hasScheme) {
+      _showImageWarning(
+        'No se pudo validar la imagen de "${coconutBroom.name}" porque la URL es inválida.',
+      );
+      return;
+    }
+
+    try {
+      final response = await http.head(uri);
+      if (!mounted || _hasShownImageWarning) return;
+
+      if (response.statusCode >= 400) {
+        _showImageWarning(
+          'La URL de la imagen de "${coconutBroom.name}" respondió con el código ${response.statusCode}.',
+        );
+      }
+    } catch (error) {
+      if (!mounted || _hasShownImageWarning) return;
+      _showImageWarning(
+        'No se pudo cargar la imagen de "${coconutBroom.name}". Error: $error',
+      );
+    }
+  }
+
+  void _showImageWarning(String message) {
+    if (_hasShownImageWarning) return;
+    _hasShownImageWarning = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+          duration: const Duration(seconds: 4),
+        ),
+      );
+    });
   }
 
   Future<void> _navigateToProductDetail(Product product) {
@@ -505,17 +566,15 @@ class _ProductCard extends StatelessWidget {
                             : Colors.white,
                       ),
                       child: Center(
-                        child: Image.network(
+                        child: buildProductImage(
                           product.imageUrl,
                           fit: BoxFit.contain,
                           filterQuality: FilterQuality.high,
-                          errorBuilder: (context, error, stackTrace) {
-                            return Container(
-                              color: theme.colorScheme.surfaceVariant,
-                              alignment: Alignment.center,
-                              child: const Icon(Icons.cleaning_services, size: 48),
-                            );
-                          },
+                          placeholder: Container(
+                            color: theme.colorScheme.surfaceVariant,
+                            alignment: Alignment.center,
+                            child: const Icon(Icons.cleaning_services, size: 48),
+                          ),
                         ),
                       ),
                     ),
