@@ -22,8 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
       name: 'Escoba de Coco normal',
       description: 'Escoba con base de madera y fibra natural profesional para interior y exterior',
       price: 3.25,
-      imageUrl:
-          'https://quimiclean-ec.com/wp-content/uploads/2022/05/escoba-de-coco-40cm.jpg',
+      imageUrl: 'https://imgs.search.brave.com/LyYKhFqqlHJA52-0yFN8m6KyvqQq0pMHiNofIdKUfkw/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zZWxl/Y3BhcGVsLmNvbS93/cC1jb250ZW50L3Vw/bG9hZHMvMjAyNC8w/OC8xMDAxMzEtNDUw/eDQ1MC5qcGc',
       category: 'Escobas',
       stock: 15,
       rating: 4.5,
