@@ -133,7 +133,6 @@ class _ProductCrudScreenState extends State<ProductCrudScreen> {
       name: _nameController.text,
       description: _descriptionController.text,
       price: double.tryParse(_priceController.text) ?? 0,
-      imageUrl: '',
       category: _categoryController.text.isEmpty
           ? 'General'
           : _categoryController.text,
@@ -151,7 +150,8 @@ class _ProductCrudScreenState extends State<ProductCrudScreen> {
         );
       }
       if (mounted) {
-        Navigator.of(context).maybePop();
+        Navigator.of(context).pop();
+        _editingProduct = null;
       }
     } catch (e) {
       if (mounted) {

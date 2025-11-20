@@ -3,7 +3,7 @@ class Product {
   final String name;
   final String description;
   final double price;
-  final String imageUrl;
+  final String? imageUrl;
   final String category;
   final int stock;
   final double rating;
@@ -13,7 +13,7 @@ class Product {
     required this.name,
     required this.description,
     required this.price,
-    required this.imageUrl,
+    this.imageUrl,
     required this.category,
     required this.stock,
     required this.rating,
@@ -25,7 +25,7 @@ class Product {
       name: data['name'] as String? ?? 'Producto',
       description: data['description'] as String? ?? '',
       price: (data['price'] as num?)?.toDouble() ?? 0,
-      imageUrl: data['imageUrl'] as String? ?? '',
+      imageUrl: data['imageUrl'] as String?,
       category: data['category'] as String? ?? 'General',
       stock: (data['stock'] as num?)?.toInt() ?? 0,
       rating: (data['rating'] as num?)?.toDouble() ?? 0,
@@ -37,10 +37,10 @@ class Product {
       'name': name,
       'description': description,
       'price': price,
-      'imageUrl': imageUrl,
       'category': category,
       'stock': stock,
       'rating': rating,
+      if (imageUrl != null && imageUrl!.isNotEmpty) 'imageUrl': imageUrl,
     };
   }
 
