@@ -294,13 +294,6 @@ class _ProductCrudScreenState extends State<ProductCrudScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Productos (Firebase CRUD)'),
-        actions: [
-          IconButton(
-            tooltip: 'Añadir producto',
-            onPressed: _startCreate,
-            icon: const Icon(Icons.add_circle_outline),
-          ),
-        ],
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _startCreate,
