@@ -17,11 +17,8 @@ class _ProductCrudScreenState extends State<ProductCrudScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
-  final TextEditingController _imageUrlController = TextEditingController();
   final TextEditingController _categoryController = TextEditingController();
   final TextEditingController _stockController = TextEditingController();
-
-  bool _isFeatured = false;
 
   Product? _editingProduct;
 
@@ -30,7 +27,6 @@ class _ProductCrudScreenState extends State<ProductCrudScreen> {
     _nameController.dispose();
     _descriptionController.dispose();
     _priceController.dispose();
-    _imageUrlController.dispose();
     _categoryController.dispose();
     _stockController.dispose();
     super.dispose();
@@ -41,10 +37,8 @@ class _ProductCrudScreenState extends State<ProductCrudScreen> {
     _nameController.clear();
     _descriptionController.clear();
     _priceController.clear();
-    _imageUrlController.clear();
     _categoryController.clear();
     _stockController.clear();
-    _isFeatured = false;
     _showEditSheet();
   }
 
@@ -53,10 +47,8 @@ class _ProductCrudScreenState extends State<ProductCrudScreen> {
     _nameController.text = product.name;
     _descriptionController.text = product.description;
     _priceController.text = product.price.toStringAsFixed(2);
-    _imageUrlController.text = product.imageUrl;
     _categoryController.text = product.category;
     _stockController.text = product.stock.toString();
-    _isFeatured = product.isFeatured;
     _showEditSheet();
   }
 
@@ -107,11 +99,6 @@ class _ProductCrudScreenState extends State<ProductCrudScreen> {
                     },
                   ),
                   TextFormField(
-                    controller: _imageUrlController,
-                    decoration:
-                        const InputDecoration(labelText: 'URL de imagen (opcional)'),
-                  ),
-                  TextFormField(
                     controller: _categoryController,
                     decoration: const InputDecoration(labelText: 'Categoría'),
                   ),
@@ -119,17 +106,6 @@ class _ProductCrudScreenState extends State<ProductCrudScreen> {
                     controller: _stockController,
                     decoration: const InputDecoration(labelText: 'Stock'),
                     keyboardType: TextInputType.number,
-                  ),
-                  SwitchListTile(
-                    contentPadding: EdgeInsets.zero,
-                    title: const Text('Destacar producto'),
-                    subtitle: const Text('Aparecerá en la sección de productos destacados'),
-                    value: _isFeatured,
-                    onChanged: (value) {
-                      setState(() {
-                        _isFeatured = value;
-                      });
-                    },
                   ),
                   const SizedBox(height: 16),
                   SizedBox(
@@ -157,13 +133,12 @@ class _ProductCrudScreenState extends State<ProductCrudScreen> {
       name: _nameController.text,
       description: _descriptionController.text,
       price: double.tryParse(_priceController.text) ?? 0,
-      imageUrl: _imageUrlController.text,
+      imageUrl: '',
       category: _categoryController.text.isEmpty
           ? 'General'
           : _categoryController.text,
       stock: int.tryParse(_stockController.text) ?? 0,
       rating: _editingProduct?.rating ?? 0,
-      isFeatured: _isFeatured,
     );
 
     try {
@@ -173,10 +148,11 @@ class _ProductCrudScreenState extends State<ProductCrudScreen> {
         await _service.updateProduct(
           product.copyWith(id: _editingProduct!.id),
           previousCategory: _editingProduct!.category,
-          previousFeatured: _editingProduct!.isFeatured,
         );
       }
-      if (mounted) Navigator.pop(context);
+      if (mounted) {
+        Navigator.of(context).maybePop();
+      }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -245,7 +221,9 @@ class _ProductCrudScreenState extends State<ProductCrudScreen> {
                     child: Text(product.name.characters.first.toUpperCase()),
                   ),
                   title: Text(product.name),
-                  subtitle: Text('${product.category} · Stock: ${product.stock}'),
+                  subtitle: Text(
+                    '${product.category} · Stock: ${product.stock} · \$${product.price.toStringAsFixed(2)}',
+                  ),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
