@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 Widget buildProductImage(
-  String imageSource, {
+  String? imageSource, {
   BoxFit fit = BoxFit.cover,
   double? width,
   double? height,
@@ -9,7 +9,7 @@ Widget buildProductImage(
   Widget? placeholder,
 }) {
   final Widget fallback = placeholder ?? _defaultPlaceholder(width, height);
-  if (imageSource.trim().isEmpty) {
+  if (imageSource == null || imageSource.trim().isEmpty) {
     return fallback;
   }
 

@@ -126,7 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
       return;
     }
 
-    final Uri? uri = Uri.tryParse(coconutBroom.imageUrl);
+    final Uri? uri = Uri.tryParse(coconutBroom.imageUrl ?? '');
     if (uri == null || !uri.hasScheme) {
       _showImageWarning(
         'No se pudo validar la imagen de "${coconutBroom.name}" porque la URL es inválida.',
