@@ -22,6 +22,9 @@ class _ProductCrudScreenState extends State<ProductCrudScreen> {
 
   Product? _editingProduct;
 
+  String get _dialogTitle =>
+      _editingProduct == null ? 'Crear producto en Firebase' : 'Editar producto';
+
   @override
   void dispose() {
     _nameController.dispose();
@@ -56,13 +59,14 @@ class _ProductCrudScreenState extends State<ProductCrudScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      showDragHandle: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
       builder: (context) {
         return Padding(
           padding: EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom,
-            left: 16,
-            right: 16,
-            top: 24,
           ),
           child: Form(
             key: _formKey,
@@ -72,7 +76,7 @@ class _ProductCrudScreenState extends State<ProductCrudScreen> {
                 children: [
                   Text(
                     _editingProduct == null
-                        ? 'Crear producto'
+                        ? 'Crear producto en Firebase'
                         : 'Editar producto',
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
@@ -128,6 +132,7 @@ class _ProductCrudScreenState extends State<ProductCrudScreen> {
   Future<void> _saveProduct() async {
     if (!_formKey.currentState!.validate()) return;
 
+    final isCreating = _editingProduct == null;
     final product = Product(
       id: _editingProduct?.id ?? '',
       name: _nameController.text,
@@ -141,7 +146,7 @@ class _ProductCrudScreenState extends State<ProductCrudScreen> {
     );
 
     try {
-      if (_editingProduct == null) {
+      if (isCreating) {
         await _service.addProduct(product);
       } else {
         await _service.updateProduct(
@@ -152,6 +157,12 @@ class _ProductCrudScreenState extends State<ProductCrudScreen> {
       if (mounted) {
         Navigator.of(context).pop();
         _editingProduct = null;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(isCreating ? 'Producto creado' : 'Producto actualizado'),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
       }
     } catch (e) {
       if (mounted) {
@@ -163,6 +174,27 @@ class _ProductCrudScreenState extends State<ProductCrudScreen> {
   }
 
   Future<void> _delete(Product product) async {
+    final confirmed = await showDialog<bool>(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Eliminar producto'),
+            content: Text('¿Seguro que deseas eliminar "${product.name}"?'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: const Text('Cancelar'),
+              ),
+              FilledButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: const Text('Eliminar'),
+              ),
+            ],
+          ),
+        ) ??
+        false;
+
+    if (!confirmed) return;
+
     try {
       await _service.deleteProduct(product);
       if (mounted) {
@@ -183,7 +215,7 @@ class _ProductCrudScreenState extends State<ProductCrudScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Productos (CRUD)'),
+        title: const Text('Productos (Firebase CRUD)'),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _startCreate,
@@ -206,7 +238,7 @@ class _ProductCrudScreenState extends State<ProductCrudScreen> {
           final products = snapshot.data ?? [];
           if (products.isEmpty) {
             return const Center(
-              child: Text('Aún no hay productos.'),
+              child: Text('Aún no hay productos en Firebase.'),
             );
           }
 
@@ -215,32 +247,136 @@ class _ProductCrudScreenState extends State<ProductCrudScreen> {
             itemBuilder: (context, index) {
               final product = products[index];
               return Card(
-                child: ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-                    child: Text(product.name.characters.first.toUpperCase()),
-                  ),
-                  title: Text(product.name),
-                  subtitle: Text(
-                    '${product.category} · Stock: ${product.stock} · \$${product.price.toStringAsFixed(2)}',
-                  ),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
+                elevation: 1,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      IconButton(
-                        icon: const Icon(Icons.edit),
-                        onPressed: () => _startEdit(product),
+                      CircleAvatar(
+                        backgroundColor:
+                            Theme.of(context).colorScheme.primaryContainer,
+                        child: Text(product.name.characters.first.toUpperCase()),
                       ),
-                      IconButton(
-                        icon: const Icon(Icons.delete_outline),
-                        onPressed: () => _delete(product),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    product.name,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium
+                                        ?.copyWith(fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 10,
+                                    vertical: 6,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .secondaryContainer,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Text(
+                                    '\\$${product.price.toStringAsFixed(2)}',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelLarge
+                                        ?.copyWith(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSecondaryContainer,
+                                        ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 4),
+                            if (product.description.isNotEmpty)
+                              Text(
+                                product.description,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                            const SizedBox(height: 8),
+                            Wrap(
+                              spacing: 8,
+                              runSpacing: 4,
+                              children: [
+                                Chip(
+                                  label: Text(
+                                    product.category.isEmpty
+                                        ? 'General'
+                                        : product.category,
+                                  ),
+                                  avatar: const Icon(Icons.category_outlined, size: 18),
+                                ),
+                                Chip(
+                                  label: Text('Stock: ${product.stock}'),
+                                  avatar: Icon(
+                                    product.stock > 0
+                                        ? Icons.inventory_2_outlined
+                                        : Icons.error_outline,
+                                    size: 18,
+                                  ),
+                                  backgroundColor: product.stock > 0
+                                      ? null
+                                      : Theme.of(context)
+                                          .colorScheme
+                                          .errorContainer,
+                                  labelStyle: product.stock > 0
+                                      ? null
+                                      : TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onErrorContainer,
+                                        ),
+                                  avatarBorder: CircleBorder(
+                                    side: BorderSide(
+                                      color: product.stock > 0
+                                          ? Colors.transparent
+                                          : Theme.of(context).colorScheme.error,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Column(
+                        children: [
+                          IconButton(
+                            tooltip: 'Editar',
+                            icon: const Icon(Icons.edit_outlined),
+                            onPressed: () => _startEdit(product),
+                          ),
+                          IconButton(
+                            tooltip: 'Eliminar',
+                            icon: const Icon(Icons.delete_outline),
+                            onPressed: () => _delete(product),
+                          ),
+                        ],
                       ),
                     ],
                   ),
                 ),
               );
             },
-            separatorBuilder: (_, __) => const SizedBox(height: 8),
+            separatorBuilder: (_, __) => const SizedBox(height: 10),
             itemCount: products.length,
           );
         },
