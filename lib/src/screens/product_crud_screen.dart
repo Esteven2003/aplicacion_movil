@@ -1,4 +1,3 @@
-import 'package:characters/characters.dart';
 import 'package:flutter/material.dart';
 
 import '../models/product.dart';
@@ -24,7 +23,7 @@ class _ProductCrudScreenState extends State<ProductCrudScreen> {
   Product? _editingProduct;
 
   String get _dialogTitle =>
-      _editingProduct == null ? 'Crear producto en Firebase' : 'Editar producto';
+      _editingProduct == null ? 'Crear producto' : 'Editar producto';
 
   @override
   void dispose() {
@@ -99,7 +98,7 @@ class _ProductCrudScreenState extends State<ProductCrudScreen> {
                     ),
                     const SizedBox(height: 12),
                     Text(
-                      'Completa los campos para publicar el producto en Firestore. '
+                      'Completa los campos para publicar el producto. '
                       'El precio y el stock cuentan con validaciones numéricas.',
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
@@ -293,7 +292,7 @@ class _ProductCrudScreenState extends State<ProductCrudScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Productos (Firebase CRUD)'),
+        title: const Text('Productos (CRUD)'),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _startCreate,
@@ -326,7 +325,7 @@ class _ProductCrudScreenState extends State<ProductCrudScreen> {
                   ),
                   const SizedBox(height: 12),
                   const Text(
-                    'Aún no hay productos en Firebase.',
+                    'Aún no hay productos.',
                     style: TextStyle(fontSize: 16),
                   ),
                   const SizedBox(height: 8),

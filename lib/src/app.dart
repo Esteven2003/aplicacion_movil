@@ -88,7 +88,7 @@ class _HomepageState extends State<Homepage> {
           ),
         ],
       ),
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -106,13 +106,13 @@ class _HomepageState extends State<Homepage> {
               style: TextStyle(
                 fontFamily: 'NerkoOne',
                 fontSize: 40.0,
-                color: Theme.of(context).colorScheme.onBackground,
+                color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
             const SizedBox(height: 28),
 
             // CAMPO DE USUARIO
-            Container(
+            SizedBox(
               width: 260.0,
               child: TextField(
                 controller: _usuarioController, // Agregado controller
@@ -153,7 +153,7 @@ class _HomepageState extends State<Homepage> {
             SizedBox(height: 14.0),
 
             // CAMPO DE CONTRASEÑA
-            Container(
+            SizedBox(
               width: 260.0,
               child: TextField(
                 controller: _passwordController, // Agregado controller
@@ -199,7 +199,7 @@ class _HomepageState extends State<Homepage> {
             SizedBox(height: 22.0),
 
             // BOTÓN PRINCIPAL - INICIAR SESIÓN (ACTUALIZADO)
-            Container(
+            SizedBox(
               width: 260.0,
               height: 46.0,
               child: ElevatedButton(
@@ -222,13 +222,13 @@ class _HomepageState extends State<Homepage> {
             SizedBox(height: 12.0),
 
             // FILA CON LOS DOS BOTONES SECUNDARIOS (ACTUALIZADOS)
-            Container(
+            SizedBox(
               width: 260.0,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   // BOTÓN REGÍSTRATE
-                  Container(
+                  SizedBox(
                     width: 130.0,
                     height: 44.0,
                     child: ElevatedButton(
@@ -255,7 +255,7 @@ class _HomepageState extends State<Homepage> {
                   ),
 
                   // BOTÓN SALIR
-                  Container(
+                  SizedBox(
                     width: 120.0,
                     height: 42.0,
                     child: ElevatedButton(

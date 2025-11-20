@@ -78,7 +78,7 @@ class _MobileResourcesScreenState extends State<MobileResourcesScreen> {
               const SizedBox(height: 12),
               DecoratedBox(
                 decoration: BoxDecoration(
-                  color: theme.colorScheme.surfaceVariant,
+                  color: theme.colorScheme.surfaceContainerHighest,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: ListTile(
@@ -119,7 +119,7 @@ class _MobileResourcesScreenState extends State<MobileResourcesScreen> {
                                   fit: BoxFit.cover,
                                   errorBuilder: (context, error, stackTrace) {
                                     return Container(
-                                      color: theme.colorScheme.surfaceVariant,
+                                      color: theme.colorScheme.surfaceContainerHighest,
                                       alignment: Alignment.center,
                                       child: const Icon(Icons.qr_code, size: 64),
                                     );
@@ -143,7 +143,7 @@ class _MobileResourcesScreenState extends State<MobileResourcesScreen> {
                               aspectRatio: 3,
                               child: DecoratedBox(
                                 decoration: BoxDecoration(
-                                  color: theme.colorScheme.surfaceVariant,
+                                  color: theme.colorScheme.surfaceContainerHighest,
                                 ),
                                 child: Center(
                                   child: FractionallySizedBox(

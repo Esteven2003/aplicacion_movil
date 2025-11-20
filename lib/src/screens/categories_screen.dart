@@ -119,7 +119,7 @@ class CategoriesScreen extends StatelessWidget {
                               placeholder: Container(
                                 width: 48,
                                 height: 48,
-                                color: theme.colorScheme.surfaceVariant,
+                                color: theme.colorScheme.surfaceContainerHighest,
                                 alignment: Alignment.center,
                                 child: const Icon(Icons.clean_hands, size: 24),
                               ),

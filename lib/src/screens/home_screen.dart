@@ -518,8 +518,8 @@ class _ProductCard extends StatelessWidget {
     final isDark = theme.brightness == Brightness.dark;
     final gradientColors = isDark
         ? [
-            theme.colorScheme.surfaceVariant.withOpacity(0.4),
-            theme.colorScheme.surfaceVariant.withOpacity(0.1),
+            theme.colorScheme.surfaceContainerHighest.withOpacity(0.4),
+            theme.colorScheme.surfaceContainerHighest.withOpacity(0.1),
           ]
         : [
             theme.colorScheme.primary.withOpacity(0.14),
@@ -570,7 +570,7 @@ class _ProductCard extends StatelessWidget {
                           fit: BoxFit.contain,
                           filterQuality: FilterQuality.high,
                           placeholder: Container(
-                            color: theme.colorScheme.surfaceVariant,
+                            color: theme.colorScheme.surfaceContainerHighest,
                             alignment: Alignment.center,
                             child: const Icon(Icons.cleaning_services, size: 48),
                           ),
