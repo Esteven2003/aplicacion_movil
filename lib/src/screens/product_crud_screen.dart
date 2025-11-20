@@ -450,7 +450,7 @@ class _ProductCrudScreenState extends State<ProductCrudScreen> {
                                               .colorScheme
                                               .onErrorContainer,
                                         ),
-                                  avatarBorder: CircleBorder(
+                                  shape: StadiumBorder(
                                     side: BorderSide(
                                       color: product.stock > 0
                                           ? Colors.transparent
