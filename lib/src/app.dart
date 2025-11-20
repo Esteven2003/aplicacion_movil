@@ -229,23 +229,26 @@ class _HomepageState extends State<Homepage> {
                 children: [
                   // BOTÓN REGÍSTRATE
                   Container(
-                    width: 120.0,
-                    height: 42.0,
+                    width: 130.0,
+                    height: 44.0,
                     child: ElevatedButton(
                       onPressed: _registrate, // Cambiado a la nueva función
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color.fromARGB(255, 64, 179, 255),
                         foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 10.0),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
+                          borderRadius: BorderRadius.circular(18.0),
                         ),
                         elevation: 3.0,
                       ),
-                      child: Text(
-                        "REGÍSTRATE",
-                        style: TextStyle(
-                          fontSize: 13.0,
-                          fontWeight: FontWeight.bold,
+                      child: const FittedBox(
+                        child: Text(
+                          "REGÍSTRATE",
+                          style: TextStyle(
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
