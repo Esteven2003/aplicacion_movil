@@ -21,6 +21,8 @@ class _ProductCrudScreenState extends State<ProductCrudScreen> {
   final TextEditingController _categoryController = TextEditingController();
   final TextEditingController _stockController = TextEditingController();
 
+  bool _isFeatured = false;
+
   Product? _editingProduct;
 
   @override
@@ -42,6 +44,7 @@ class _ProductCrudScreenState extends State<ProductCrudScreen> {
     _imageUrlController.clear();
     _categoryController.clear();
     _stockController.clear();
+    _isFeatured = false;
     _showEditSheet();
   }
 
@@ -53,6 +56,7 @@ class _ProductCrudScreenState extends State<ProductCrudScreen> {
     _imageUrlController.text = product.imageUrl;
     _categoryController.text = product.category;
     _stockController.text = product.stock.toString();
+    _isFeatured = product.isFeatured;
     _showEditSheet();
   }
 
@@ -116,6 +120,17 @@ class _ProductCrudScreenState extends State<ProductCrudScreen> {
                     decoration: const InputDecoration(labelText: 'Stock'),
                     keyboardType: TextInputType.number,
                   ),
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: const Text('Destacar producto'),
+                    subtitle: const Text('Aparecerá en la sección de productos destacados'),
+                    value: _isFeatured,
+                    onChanged: (value) {
+                      setState(() {
+                        _isFeatured = value;
+                      });
+                    },
+                  ),
                   const SizedBox(height: 16),
                   SizedBox(
                     width: double.infinity,
@@ -148,13 +163,18 @@ class _ProductCrudScreenState extends State<ProductCrudScreen> {
           : _categoryController.text,
       stock: int.tryParse(_stockController.text) ?? 0,
       rating: _editingProduct?.rating ?? 0,
+      isFeatured: _isFeatured,
     );
 
     try {
       if (_editingProduct == null) {
         await _service.addProduct(product);
       } else {
-        await _service.updateProduct(product.copyWith(id: _editingProduct!.id));
+        await _service.updateProduct(
+          product.copyWith(id: _editingProduct!.id),
+          previousCategory: _editingProduct!.category,
+          previousFeatured: _editingProduct!.isFeatured,
+        );
       }
       if (mounted) Navigator.pop(context);
     } catch (e) {
@@ -168,7 +188,7 @@ class _ProductCrudScreenState extends State<ProductCrudScreen> {
 
   Future<void> _delete(Product product) async {
     try {
-      await _service.deleteProduct(product.id);
+      await _service.deleteProduct(product);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('${product.name} eliminado')),
