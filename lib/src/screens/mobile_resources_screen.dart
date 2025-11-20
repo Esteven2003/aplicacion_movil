@@ -1,10 +1,16 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 
-class MobileResourcesScreen extends StatelessWidget {
+class MobileResourcesScreen extends StatefulWidget {
   const MobileResourcesScreen({super.key});
 
+  @override
+  State<MobileResourcesScreen> createState() => _MobileResourcesScreenState();
+}
+
+class _MobileResourcesScreenState extends State<MobileResourcesScreen> {
   static const List<int> _barcodePattern = [
     2,
     1,
@@ -22,6 +28,28 @@ class MobileResourcesScreen extends StatelessWidget {
     1,
     2,
   ];
+
+  String? _lastScan;
+
+  void _openScanner() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => _CameraScanner(
+          onScan: (value) {
+            setState(() {
+              _lastScan = value;
+            });
+            if (mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Lectura capturada: $value')),
+              );
+            }
+          },
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +74,24 @@ class MobileResourcesScreen extends StatelessWidget {
               'Acceso a hardware móvil: Uso de cámara, GPS y lectura de códigos QR.',
               style: textTheme.titleMedium,
             ),
+            if (_lastScan != null) ...[
+              const SizedBox(height: 12),
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.surfaceVariant,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: ListTile(
+                  leading: const Icon(Icons.qr_code_scanner),
+                  title: const Text('Última lectura'),
+                  subtitle: Text(_lastScan!),
+                  trailing: IconButton(
+                    onPressed: () => setState(() => _lastScan = null),
+                    icon: const Icon(Icons.clear),
+                  ),
+                ),
+              ),
+            ],
             const SizedBox(height: 32),
             Card(
               elevation: 2,
@@ -141,8 +187,68 @@ class MobileResourcesScreen extends StatelessWidget {
                 ),
               ),
             ),
+            const SizedBox(height: 24),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                icon: const Icon(Icons.camera_alt_outlined),
+                label: const Text('Abrir cámara para escanear'),
+                onPressed: _openScanner,
+              ),
+            ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _CameraScanner extends StatelessWidget {
+  const _CameraScanner({required this.onScan});
+
+  final ValueChanged<String> onScan;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Escáner de cámara'),
+      ),
+      body: Stack(
+        children: [
+          MobileScanner(
+            fit: BoxFit.cover,
+            onDetect: (capture) {
+              final barcode =
+                  capture.barcodes.isNotEmpty ? capture.barcodes.first : null;
+              final value = barcode?.rawValue ?? barcode?.displayValue;
+              if (value != null) {
+                onScan(value);
+                Navigator.pop(context);
+              }
+            },
+          ),
+          Align(
+            alignment: Alignment.topCenter,
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.5),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Padding(
+                  padding: EdgeInsets.all(12.0),
+                  child: Text(
+                    'Apunta la cámara hacia un código QR o de barras para escanearlo.',
+                    style: TextStyle(color: Colors.white),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

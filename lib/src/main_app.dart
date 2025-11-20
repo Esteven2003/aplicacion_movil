@@ -6,6 +6,7 @@ import 'screens/categories_screen.dart';
 import 'screens/search_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/mobile_resources_screen.dart';
+import 'screens/product_crud_screen.dart';
 import 'models/product.dart';
 import 'models/cart_item.dart';
 
@@ -46,6 +47,7 @@ class MainApp extends StatelessWidget {
                   themeNotifier: themeNotifier,
                 ),
             '/mobile_resources': (context) => const MobileResourcesScreen(),
+            '/crud': (context) => const ProductCrudScreen(),
           },
           onGenerateRoute: (settings) {
 
