@@ -94,26 +94,26 @@ class _HomepageState extends State<Homepage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             CircleAvatar(
-              radius: 100.0,
+              radius: 80.0,
               backgroundColor: Theme.of(context).colorScheme.primaryContainer,
               backgroundImage: const NetworkImage(
                 "https://vstatic.vietnam.vn/vietnam/resource/IMAGE/2025/4/28/6f3a83b7fe4141e7a430823f5efc1a92",
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Text(
               "Login",
               style: TextStyle(
                 fontFamily: 'NerkoOne',
-                fontSize: 50.0,
+                fontSize: 40.0,
                 color: Theme.of(context).colorScheme.onBackground,
               ),
             ),
-            SizedBox(height: 40),
+            const SizedBox(height: 28),
 
             // CAMPO DE USUARIO
             Container(
-              width: 300.0,
+              width: 260.0,
               child: TextField(
                 controller: _usuarioController, // Agregado controller
                 enableInteractiveSelection: true,
@@ -143,18 +143,18 @@ class _HomepageState extends State<Homepage> {
                     ),
                   ),
                   contentPadding: EdgeInsets.symmetric(
-                    horizontal: 20.0,
-                    vertical: 15.0,
+                    horizontal: 16.0,
+                    vertical: 12.0,
                   ),
                 ),
               ),
             ),
 
-            SizedBox(height: 20.0),
+            SizedBox(height: 14.0),
 
             // CAMPO DE CONTRASEÑA
             Container(
-              width: 300.0,
+              width: 260.0,
               child: TextField(
                 controller: _passwordController, // Agregado controller
                 obscureText: true,
@@ -189,19 +189,19 @@ class _HomepageState extends State<Homepage> {
                     ),
                   ),
                   contentPadding: EdgeInsets.symmetric(
-                    horizontal: 20.0,
-                    vertical: 15.0,
+                    horizontal: 16.0,
+                    vertical: 12.0,
                   ),
                 ),
               ),
             ),
 
-            SizedBox(height: 30.0),
+            SizedBox(height: 22.0),
 
             // BOTÓN PRINCIPAL - INICIAR SESIÓN (ACTUALIZADO)
             Container(
-              width: 300.0,
-              height: 50.0,
+              width: 260.0,
+              height: 46.0,
               child: ElevatedButton(
                 onPressed: _iniciarSesion, // Cambiado a la nueva función
                 style: ElevatedButton.styleFrom(
@@ -214,47 +214,50 @@ class _HomepageState extends State<Homepage> {
                 ),
                 child: Text(
                   "INICIAR SESIÓN",
-                  style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
                 ),
               ),
             ),
 
-            SizedBox(height: 15.0),
+            SizedBox(height: 12.0),
 
             // FILA CON LOS DOS BOTONES SECUNDARIOS (ACTUALIZADOS)
             Container(
-              width: 300.0,
+              width: 260.0,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   // BOTÓN REGÍSTRATE
                   Container(
-                    width: 140.0,
-                    height: 45.0,
+                    width: 130.0,
+                    height: 44.0,
                     child: ElevatedButton(
                       onPressed: _registrate, // Cambiado a la nueva función
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color.fromARGB(255, 64, 179, 255),
                         foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 10.0),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
+                          borderRadius: BorderRadius.circular(18.0),
                         ),
                         elevation: 3.0,
                       ),
-                      child: Text(
-                        "REGÍSTRATE",
-                        style: TextStyle(
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.bold,
+                      child: const FittedBox(
+                        child: Text(
+                          "REGÍSTRATE",
+                          style: TextStyle(
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                  
+
                   // BOTÓN SALIR
                   Container(
-                    width: 140.0,
-                    height: 45.0,
+                    width: 120.0,
+                    height: 42.0,
                     child: ElevatedButton(
                       onPressed: _salir, // Cambiado a la nueva función
                       style: ElevatedButton.styleFrom(
@@ -268,7 +271,7 @@ class _HomepageState extends State<Homepage> {
                       child: Text(
                         "SALIR",
                         style: TextStyle(
-                          fontSize: 14.0,
+                          fontSize: 13.0,
                           fontWeight: FontWeight.bold,
                         ),
                       ),

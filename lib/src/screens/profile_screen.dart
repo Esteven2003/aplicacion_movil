@@ -98,6 +98,14 @@ class ProfileScreen extends StatelessWidget {
                     },
                   ),
                   ListTile(
+                    leading: const Icon(Icons.inventory_2_outlined),
+                    title: const Text('CRUD de productos'),
+                    trailing: const Icon(Icons.arrow_forward_ios),
+                    onTap: () {
+                      Navigator.pushNamed(context, '/crud');
+                    },
+                  ),
+                  ListTile(
                     leading: const Icon(Icons.help),
                     title: const Text('Ayuda y Soporte'),
                     trailing: const Icon(Icons.arrow_forward_ios),
