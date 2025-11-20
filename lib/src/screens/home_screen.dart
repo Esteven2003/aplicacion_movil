@@ -393,7 +393,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               const SizedBox(height: 8),
                               Text(
-                                'Explora nuestras categorías y encuentra tus básicos de limpieza.',
+                                'Explora nuestras categorías y encuentra tus productos básicos de limpieza.',
                                 style: theme.textTheme.bodyMedium,
                               ),
                               const SizedBox(height: 12),
