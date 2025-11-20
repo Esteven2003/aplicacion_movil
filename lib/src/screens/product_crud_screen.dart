@@ -76,7 +76,7 @@ class _ProductCrudScreenState extends State<ProductCrudScreen> {
                 children: [
                   Text(
                     _editingProduct == null
-                        ? 'Crear producto en Firebase'
+                        ? 'Crear producto'
                         : 'Editar producto',
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
@@ -187,7 +187,7 @@ class _ProductCrudScreenState extends State<ProductCrudScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Productos (Firebase CRUD)'),
+        title: const Text('Productos (CRUD)'),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _startCreate,
@@ -210,7 +210,7 @@ class _ProductCrudScreenState extends State<ProductCrudScreen> {
           final products = snapshot.data ?? [];
           if (products.isEmpty) {
             return const Center(
-              child: Text('Aún no hay productos en Firebase.'),
+              child: Text('Aún no hay productos.'),
             );
           }
 
