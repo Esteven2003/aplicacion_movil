@@ -7,6 +7,7 @@ class Product {
   final String category;
   final int stock;
   final double rating;
+  final bool isFeatured;
 
   Product({
     required this.id,
@@ -17,6 +18,7 @@ class Product {
     required this.category,
     required this.stock,
     required this.rating,
+    this.isFeatured = false,
   });
 
   factory Product.fromMap(String id, Map<String, dynamic> data) {
@@ -29,6 +31,7 @@ class Product {
       category: data['category'] as String? ?? 'General',
       stock: (data['stock'] as num?)?.toInt() ?? 0,
       rating: (data['rating'] as num?)?.toDouble() ?? 0,
+      isFeatured: data['isFeatured'] as bool? ?? false,
     );
   }
 
@@ -41,6 +44,7 @@ class Product {
       'category': category,
       'stock': stock,
       'rating': rating,
+      'isFeatured': isFeatured,
     };
   }
 
@@ -53,6 +57,7 @@ class Product {
     String? category,
     int? stock,
     double? rating,
+    bool? isFeatured,
   }) {
     return Product(
       id: id ?? this.id,
@@ -63,6 +68,7 @@ class Product {
       category: category ?? this.category,
       stock: stock ?? this.stock,
       rating: rating ?? this.rating,
+      isFeatured: isFeatured ?? this.isFeatured,
     );
   }
 }
