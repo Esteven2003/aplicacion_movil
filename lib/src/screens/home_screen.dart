@@ -1,8 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-
 import '../models/product.dart';
 import '../models/cart_item.dart';
 import '../widgets/product_image.dart';
@@ -18,93 +16,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final TextEditingController _searchController = TextEditingController();
-  bool _hasShownImageWarning = false;
-
   final ProductService _productService = ProductService();
   StreamSubscription<List<Product>>? _productSubscription;
-
-  final List<Product> _seedProducts = [
-    Product(
-      id: '1',
-      name: 'Escoba de Coco normal',
-      description: 'Escoba con base de madera y fibra natural profesional para interior y exterior',
-      price: 3.25,
-      imageUrl: 'https://imgs.search.brave.com/LyYKhFqqlHJA52-0yFN8m6KyvqQq0pMHiNofIdKUfkw/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zZWxl/Y3BhcGVsLmNvbS93/cC1jb250ZW50L3Vw/bG9hZHMvMjAyNC8w/OC8xMDAxMzEtNDUw/eDQ1MC5qcGc',
-      category: 'Escobas',
-      stock: 15,
-      rating: 4.5,
-    ),
-    Product(
-      id: '2',
-      name: 'Trapeador de 500g',
-      description: 'Trapeador giratorio con cabeza de algodón extraíble',
-      price: 5.00,
-      imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyVXrbCfdtCrgg2fI3qvqnidTpEzpTmeUiLA&s',
-      category: 'Trapeadores',
-      stock: 8,
-      rating: 4.8,
-    ),
-    Product(
-      id: '3',
-      name: 'Pala',
-      description: 'Pala de plástico con palo de madera',
-      price: 1.50,
-      imageUrl: 'https://static.wixstatic.com/media/54d53f_a7973bd71093481da67e5ba37711a0fe~mv2.png/v1/fill/w_480,h_480,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/54d53f_a7973bd71093481da67e5ba37711a0fe~mv2.png',
-      category: 'Otros',
-      stock: 5,
-      rating: 4.9,
-    ),
-    Product(
-      id: '4',
-      name: 'Palos de madera',
-      description: 'Palos de madera sin rosca de tamaño normal por unidad',
-      price: 1.00,
-      imageUrl: 'https://http2.mlstatic.com/D_NQ_NP_837154-MLM75800072961_042024-O.webp',
-      category: 'Palos',
-      stock: 6,
-      rating: 4.6,
-    ),
-    Product(
-      id: '5',
-      name: 'Palos de metal',
-      description: 'Palos de metal con rosca',
-      price: 2.00,
-      imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZ9Ne4ZrZ_42Pv_TR-DHd06PzuZxyn0gZjE3rr4l-rQ1Uzx6QM_PTUVPWNBkkLtmTAcy0&usqp=CAU',
-      category: 'Palos',
-      stock: 3,
-      rating: 4.8,
-    ),
-    Product(
-      id: '6',
-      name: 'Cepillo para Baño',
-      description: 'Cepillo con cerdas firmes para limpieza profunda de baños',
-      price: 3.50,
-      imageUrl: 'https://almacenesmirna.com.ec/wp-content/uploads/2020/08/HO-2031-fr.jpg',
-      category: 'Cepillos',
-      stock: 20,
-      rating: 4.3,
-    ),
-    Product(
-      id: '7',
-      name: 'Cepillo para Muebles',
-      description: 'Cepillo suave para limpieza de muebles y superficies delicadas',
-      price: 2.00,
-      imageUrl: 'https://ambientegourmet.vtexassets.com/arquivos/ids/236875-800-auto?v=638791342265570000&width=800&height=auto&aspect=true',
-      category: 'Cepillos',
-      stock: 15,
-      rating: 4.4,
-    ),
-    Product(
-      id: '8',
-      name: 'Cepillo de plástico lava ropa',
-      description: 'Cepillo para lavado de ropa tipo plancha',
-      price: 1.50,
-      imageUrl: 'https://res.cloudinary.com/agglobal-com/image/upload/f_auto,q_auto,g_center,b_rgb:fff,c_pad,d_assets:noImage.webp,w_1000,h_1000/053077.webp',
-      category: 'Cepillos',
-      stock: 12,
-      rating: 4.5,
-    ),
-  ];
 
   late List<Product> _products;
 
@@ -114,18 +27,15 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _products = List<Product>.from(_seedProducts);
+    _products = [];
     _productSubscription = _productService.watchProducts().listen(
       (remoteProducts) {
         if (!mounted) return;
         setState(() {
-          _products = remoteProducts.isNotEmpty
-              ? remoteProducts
-              : List<Product>.from(_seedProducts);
+          _products = remoteProducts;
         });
       },
     );
-    _checkCoconutBroomImage();
   }
 
   @override
@@ -133,57 +43,6 @@ class _HomeScreenState extends State<HomeScreen> {
     _productSubscription?.cancel();
     _searchController.dispose();
     super.dispose();
-  }
-
-  Future<void> _checkCoconutBroomImage() async {
-    Product? coconutBroom;
-    try {
-      coconutBroom = _products.firstWhere((product) => product.id == '1');
-    } catch (_) {
-      coconutBroom = null;
-    }
-
-    if (coconutBroom == null) {
-      return;
-    }
-
-    final Uri? uri = Uri.tryParse(coconutBroom.imageUrl ?? '');
-    if (uri == null || !uri.hasScheme) {
-      _showImageWarning(
-        'No se pudo validar la imagen de "${coconutBroom.name}" porque la URL es inválida.',
-      );
-      return;
-    }
-
-    try {
-      final response = await http.head(uri);
-      if (!mounted || _hasShownImageWarning) return;
-
-      if (response.statusCode >= 400) {
-        _showImageWarning(
-          'La URL de la imagen de "${coconutBroom.name}" respondió con el código ${response.statusCode}.',
-        );
-      }
-    } catch (error) {
-      if (!mounted || _hasShownImageWarning) return;
-      _showImageWarning(
-        'No se pudo cargar la imagen de "${coconutBroom.name}". Error: $error',
-      );
-    }
-  }
-
-  void _showImageWarning(String message) {
-    if (_hasShownImageWarning) return;
-    _hasShownImageWarning = true;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(message),
-          duration: const Duration(seconds: 4),
-        ),
-      );
-    });
   }
 
   Future<void> _navigateToProductDetail(Product product) {
