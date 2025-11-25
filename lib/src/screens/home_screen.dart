@@ -563,37 +563,6 @@ class _HomeScreenState extends State<HomeScreen> {
           const SliverToBoxAdapter(child: SizedBox(height: 24)),
         ],
       ),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _selectedDestination,
-        onDestinationSelected: _onDestinationSelected,
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.home_outlined),
-            selectedIcon: Icon(Icons.home),
-            label: 'Inicio',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.category_outlined),
-            selectedIcon: Icon(Icons.category),
-            label: 'Categorías',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.search_outlined),
-            selectedIcon: Icon(Icons.search),
-            label: 'Buscar',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.shopping_bag_outlined),
-            selectedIcon: Icon(Icons.shopping_bag),
-            label: 'Carrito',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.person_outline),
-            selectedIcon: Icon(Icons.person),
-            label: 'Perfil',
-          ),
-        ],
-      ),
     );
   }
 }
