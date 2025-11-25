@@ -105,7 +105,7 @@ class _HomepageState extends State<Homepage> {
 
             // CAMPO DE USUARIO
             SizedBox(
-              width: 260.0,
+              width: 250.0,
               child: TextField(
                 controller: _usuarioController, // Agregado controller
                 enableInteractiveSelection: true,
@@ -146,7 +146,7 @@ class _HomepageState extends State<Homepage> {
 
             // CAMPO DE CONTRASEÑA
             SizedBox(
-              width: 260.0,
+              width: 250.0,
               child: TextField(
                 controller: _passwordController, // Agregado controller
                 obscureText: true,
