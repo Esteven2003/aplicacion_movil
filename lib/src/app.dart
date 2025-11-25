@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'main_app.dart'; // Asegúrate de importar main_app.dart
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key, required this.themeNotifier});
@@ -31,14 +30,7 @@ class _HomepageState extends State<Homepage> {
     debugPrint("Contraseña: $password");
 
     // Navegar a la aplicación principal
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => MainApp(
-          themeNotifier: widget.themeNotifier,
-        ),
-      ),
-    );
+    Navigator.pushReplacementNamed(context, '/home');
   }
 
   void _registrate() {
