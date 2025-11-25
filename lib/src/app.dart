@@ -25,7 +25,7 @@ class _HomepageState extends State<Homepage> {
     // Aquí puedes agregar validaciones
     String usuario = _usuarioController.text;
     String password = _passwordController.text;
-    
+
     debugPrint("Usuario: $usuario");
     debugPrint("Contraseña: $password");
 
@@ -81,198 +81,222 @@ class _HomepageState extends State<Homepage> {
         ],
       ),
       backgroundColor: Theme.of(context).colorScheme.surface,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            CircleAvatar(
-              radius: 80.0,
-              backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-              backgroundImage: const NetworkImage(
-                "https://vstatic.vietnam.vn/vietnam/resource/IMAGE/2025/4/28/6f3a83b7fe4141e7a430823f5efc1a92",
+      body: SafeArea(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom + 24,
               ),
-            ),
-            const SizedBox(height: 20),
-            Text(
-              "Login",
-              style: TextStyle(
-                fontFamily: 'NerkoOne',
-                fontSize: 40.0,
-                color: Theme.of(context).colorScheme.onSurface,
-              ),
-            ),
-            const SizedBox(height: 28),
-
-            // CAMPO DE USUARIO
-            SizedBox(
-              width: 250.0,
-              child: TextField(
-                controller: _usuarioController, // Agregado controller
-                enableInteractiveSelection: true,
-                decoration: InputDecoration(
-                  hintText: "USUARIO",
-                  labelText: "Usuario",
-                  prefixIcon: Icon(
-                    Icons.person,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  filled: true,
-                  fillColor: Theme.of(context).colorScheme.surface,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                    borderSide: BorderSide(
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                    borderSide: BorderSide(
-                      color: Theme.of(context).colorScheme.primary,
-                      width: 2.0,
-                    ),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(
-                    horizontal: 16.0,
-                    vertical: 12.0,
-                  ),
-                ),
-              ),
-            ),
-
-            SizedBox(height: 14.0),
-
-            // CAMPO DE CONTRASEÑA
-            SizedBox(
-              width: 250.0,
-              child: TextField(
-                controller: _passwordController, // Agregado controller
-                obscureText: true,
-                enableInteractiveSelection: true,
-                decoration: InputDecoration(
-                  hintText: "CONTRASEÑA",
-                  labelText: "Contraseña",
-                  suffixIcon: Icon(
-                    Icons.visibility,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  prefixIcon: Icon(
-                    Icons.lock,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  filled: true,
-                  fillColor: Theme.of(context).colorScheme.surface,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                    borderSide: BorderSide(
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                    borderSide: BorderSide(
-                      color: Theme.of(context).colorScheme.primary,
-                      width: 2.0,
-                    ),
-                  ),
-                  contentPadding: EdgeInsets.symmetric(
-                    horizontal: 16.0,
-                    vertical: 12.0,
-                  ),
-                ),
-              ),
-            ),
-
-            SizedBox(height: 22.0),
-
-            // BOTÓN PRINCIPAL - INICIAR SESIÓN (ACTUALIZADO)
-            SizedBox(
-              width: 260.0,
-              height: 46.0,
-              child: ElevatedButton(
-                onPressed: _iniciarSesion, // Cambiado a la nueva función
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 179, 64, 255),
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                  elevation: 5.0,
-                ),
-                child: Text(
-                  "INICIAR SESIÓN",
-                  style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
-
-            SizedBox(height: 12.0),
-
-            // FILA CON LOS DOS BOTONES SECUNDARIOS (ACTUALIZADOS)
-            SizedBox(
-              width: 260.0,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // BOTÓN REGÍSTRATE
-                  SizedBox(
-                    width: 130.0,
-                    height: 44.0,
-                    child: ElevatedButton(
-                      onPressed: _registrate, // Cambiado a la nueva función
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromARGB(255, 64, 179, 255),
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 10.0),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      CircleAvatar(
+                        radius: 80.0,
+                        backgroundColor:
+                            Theme.of(context).colorScheme.primaryContainer,
+                        backgroundImage: const NetworkImage(
+                          "https://vstatic.vietnam.vn/vietnam/resource/IMAGE/2025/4/28/6f3a83b7fe4141e7a430823f5efc1a92",
                         ),
-                        elevation: 3.0,
                       ),
-                      child: const FittedBox(
-                        child: Text(
-                          "REGÍSTRATE",
-                          style: TextStyle(
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.bold,
+                      const SizedBox(height: 20),
+                      Text(
+                        "Login",
+                        style: TextStyle(
+                          fontFamily: 'NerkoOne',
+                          fontSize: 40.0,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                      ),
+                      const SizedBox(height: 28),
+
+                      // CAMPO DE USUARIO
+                      SizedBox(
+                        width: 260.0,
+                        child: TextField(
+                          controller: _usuarioController, // Agregado controller
+                          enableInteractiveSelection: true,
+                          decoration: InputDecoration(
+                            hintText: "USUARIO",
+                            labelText: "Usuario",
+                            prefixIcon: Icon(
+                              Icons.person,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                            filled: true,
+                            fillColor: Theme.of(context).colorScheme.surface,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                              borderSide: BorderSide(
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                              borderSide: BorderSide(
+                                color: Theme.of(context).colorScheme.primary,
+                                width: 2.0,
+                              ),
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16.0,
+                              vertical: 12.0,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ),
 
-                  // BOTÓN SALIR
-                  SizedBox(
-                    width: 120.0,
-                    height: 42.0,
-                    child: ElevatedButton(
-                      onPressed: _salir, // Cambiado a la nueva función
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
+                      const SizedBox(height: 14.0),
+
+                      // CAMPO DE CONTRASEÑA
+                      SizedBox(
+                        width: 260.0,
+                        child: TextField(
+                          controller: _passwordController, // Agregado controller
+                          obscureText: true,
+                          enableInteractiveSelection: true,
+                          decoration: InputDecoration(
+                            hintText: "CONTRASEÑA",
+                            labelText: "Contraseña",
+                            suffixIcon: Icon(
+                              Icons.visibility,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                            prefixIcon: Icon(
+                              Icons.lock,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                            filled: true,
+                            fillColor: Theme.of(context).colorScheme.surface,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                              borderSide: BorderSide(
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                              borderSide: BorderSide(
+                                color: Theme.of(context).colorScheme.primary,
+                                width: 2.0,
+                              ),
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16.0,
+                              vertical: 12.0,
+                            ),
+                          ),
                         ),
-                        elevation: 3.0,
                       ),
-                      child: Text(
-                        "SALIR",
-                        style: TextStyle(
-                          fontSize: 13.0,
-                          fontWeight: FontWeight.bold,
+
+                      const SizedBox(height: 22.0),
+
+                      // BOTÓN PRINCIPAL - INICIAR SESIÓN (ACTUALIZADO)
+                      SizedBox(
+                        width: 260.0,
+                        height: 46.0,
+                        child: ElevatedButton(
+                          onPressed:
+                              _iniciarSesion, // Cambiado a la nueva función
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                const Color.fromARGB(255, 179, 64, 255),
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                            elevation: 5.0,
+                          ),
+                          child: const Text(
+                            "INICIAR SESIÓN",
+                            style: TextStyle(
+                                fontSize: 16.0, fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
-                    ),
+
+                      const SizedBox(height: 12.0),
+
+                      // FILA CON LOS DOS BOTONES SECUNDARIOS (ACTUALIZADOS)
+                      SizedBox(
+                        width: 260.0,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            // BOTÓN REGÍSTRATE
+                            SizedBox(
+                              width: 130.0,
+                              height: 44.0,
+                              child: ElevatedButton(
+                                onPressed:
+                                    _registrate, // Cambiado a la nueva función
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      const Color.fromARGB(255, 64, 179, 255),
+                                  foregroundColor: Colors.white,
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 12.0,
+                                    vertical: 10.0,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18.0),
+                                  ),
+                                  elevation: 3.0,
+                                ),
+                                child: const FittedBox(
+                                  child: Text(
+                                    "REGÍSTRATE",
+                                    style: TextStyle(
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                            // BOTÓN SALIR
+                            SizedBox(
+                              width: 120.0,
+                              height: 42.0,
+                              child: ElevatedButton(
+                                onPressed: _salir, // Cambiado a la nueva función
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.red,
+                                  foregroundColor: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15.0),
+                                  ),
+                                  elevation: 3.0,
+                                ),
+                                child: const Text(
+                                  "SALIR",
+                                  style: TextStyle(
+                                    fontSize: 13.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
-            ),
-          ],
+            );
+          },
         ),
       ),
     );
