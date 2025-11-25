@@ -13,6 +13,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final TextEditingController _searchController = TextEditingController();
   bool _hasShownImageWarning = false;
 
@@ -292,6 +293,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
 
     return Scaffold(
+      key: _scaffoldKey,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(72),
         child: Column(
@@ -307,6 +309,15 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Row(
                 children: [
+                  IconButton(
+                    icon: const Icon(
+                      Icons.menu,
+                      color: Colors.white,
+                    ),
+                    tooltip: 'Abrir menú',
+                    onPressed: () => _scaffoldKey.currentState?.openDrawer(),
+                  ),
+                  const SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       'La Hogareña',
@@ -358,6 +369,92 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ],
+        ),
+      ),
+      drawer: Drawer(
+        child: SafeArea(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              DrawerHeader(
+                decoration: BoxDecoration(
+                  color: headerColor,
+                ),
+                child: Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Text(
+                    'La Hogareña',
+                    style: theme.textTheme.headlineSmall?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              ),
+              _NavigationDrawerItem(
+                icon: Icons.home_outlined,
+                selectedIcon: Icons.home,
+                label: 'Inicio',
+                isSelected: _selectedDestination == 0,
+                onTap: () {
+                  Navigator.pop(context);
+                  _onDestinationSelected(0);
+                },
+              ),
+              _NavigationDrawerItem(
+                icon: Icons.category_outlined,
+                selectedIcon: Icons.category,
+                label: 'Categorías',
+                isSelected: _selectedDestination == 1,
+                onTap: () {
+                  Navigator.pop(context);
+                  _onDestinationSelected(1);
+                },
+              ),
+              _NavigationDrawerItem(
+                icon: Icons.search_outlined,
+                selectedIcon: Icons.search,
+                label: 'Buscar',
+                isSelected: _selectedDestination == 2,
+                onTap: () {
+                  Navigator.pop(context);
+                  _onDestinationSelected(2);
+                },
+              ),
+              _NavigationDrawerItem(
+                icon: Icons.shopping_bag_outlined,
+                selectedIcon: Icons.shopping_bag,
+                label: 'Carrito',
+                isSelected: _selectedDestination == 3,
+                trailing: totalCartItems > 0
+                    ? CircleAvatar(
+                        radius: 12,
+                        backgroundColor: theme.colorScheme.primaryContainer,
+                        child: Text(
+                          totalCartItems.toString(),
+                          style: theme.textTheme.labelSmall?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      )
+                    : null,
+                onTap: () {
+                  Navigator.pop(context);
+                  _onDestinationSelected(3);
+                },
+              ),
+              _NavigationDrawerItem(
+                icon: Icons.person_outline,
+                selectedIcon: Icons.person,
+                label: 'Perfil',
+                isSelected: _selectedDestination == 4,
+                onTap: () {
+                  Navigator.pop(context);
+                  _onDestinationSelected(4);
+                },
+              ),
+            ],
+          ),
         ),
       ),
       body: CustomScrollView(
@@ -626,6 +723,38 @@ class _ProductCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _NavigationDrawerItem extends StatelessWidget {
+  const _NavigationDrawerItem({
+    required this.icon,
+    required this.selectedIcon,
+    required this.label,
+    required this.isSelected,
+    required this.onTap,
+    this.trailing,
+  });
+
+  final IconData icon;
+  final IconData selectedIcon;
+  final String label;
+  final bool isSelected;
+  final VoidCallback onTap;
+  final Widget? trailing;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return ListTile(
+      leading: Icon(isSelected ? selectedIcon : icon),
+      title: Text(label),
+      trailing: trailing,
+      selected: isSelected,
+      selectedColor: theme.colorScheme.primary,
+      onTap: onTap,
     );
   }
 }
