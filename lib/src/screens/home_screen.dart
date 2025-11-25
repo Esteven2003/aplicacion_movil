@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/product.dart';
 import '../models/cart_item.dart';
 import '../widgets/product_image.dart';
+import '../services/product_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -17,7 +20,10 @@ class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _searchController = TextEditingController();
   bool _hasShownImageWarning = false;
 
-  final List<Product> products = [
+  final ProductService _productService = ProductService();
+  StreamSubscription<List<Product>>? _productSubscription;
+
+  final List<Product> _seedProducts = [
     Product(
       id: '1',
       name: 'Escoba de Coco normal',
@@ -100,17 +106,31 @@ class _HomeScreenState extends State<HomeScreen> {
     ),
   ];
 
+  late List<Product> _products;
+
   final List<CartItem> cartItems = [];
   int _selectedDestination = 0;
 
   @override
   void initState() {
     super.initState();
+    _products = List<Product>.from(_seedProducts);
+    _productSubscription = _productService.watchProducts().listen(
+      (remoteProducts) {
+        if (!mounted) return;
+        setState(() {
+          _products = remoteProducts.isNotEmpty
+              ? remoteProducts
+              : List<Product>.from(_seedProducts);
+        });
+      },
+    );
     _checkCoconutBroomImage();
   }
 
   @override
   void dispose() {
+    _productSubscription?.cancel();
     _searchController.dispose();
     super.dispose();
   }
@@ -118,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _checkCoconutBroomImage() async {
     Product? coconutBroom;
     try {
-      coconutBroom = products.firstWhere((product) => product.id == '1');
+      coconutBroom = _products.firstWhere((product) => product.id == '1');
     } catch (_) {
       coconutBroom = null;
     }
@@ -182,7 +202,7 @@ class _HomeScreenState extends State<HomeScreen> {
       context,
       '/categories',
       arguments: {
-        'products': products,
+        'products': _products,
         'onProductTap': _navigateToProductDetail,
       },
     );
@@ -193,7 +213,7 @@ class _HomeScreenState extends State<HomeScreen> {
       context,
       '/search',
       arguments: {
-        'products': products,
+        'products': _products,
         'onProductTap': _navigateToProductDetail,
       },
     );
@@ -549,14 +569,14 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
-                  final product = products[index];
+                  final product = _products[index];
                   return _ProductCard(
                     product: product,
                     onAddToCart: () => _addToCart(product),
                     onTap: () => _navigateToProductDetail(product),
                   );
                 },
-                childCount: products.length,
+                childCount: _products.length,
               ),
             ),
           ),
